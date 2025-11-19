@@ -1,0 +1,5 @@
+body { font-family: Arial, sans-serif; margin: 20px; }
+input, select { margin: 5px; padding: 5px; }
+button { margin: 5px; padding: 5px 10px; cursor: pointer; }
+#list-block div { border: 1px solid #ccc; margin: 5px; padding: 5px; }
+#message { margin: 10px 0; font-weight: bold; color: green; }

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Cafe Menu - Admin</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<h2>Admin Panel</h2>
+
+<!-- Message -->
+<div id="message"></div>
+
+<!-- Add Category -->
+<div>
+    <h3>Add Category</h3>
+    <input type="text" id="cat_name_kg" placeholder="Name KG">
+    <input type="text" id="cat_name_en" placeholder="Name EN">
+    <input type="text" id="cat_image" placeholder="Image URL">
+    <button id="add-category-btn" onclick="addCategory()">Add Category</button>
+</div>
+
+<!-- Add Item -->
+<div>
+    <h3>Add Item</h3>
+    <select id="category_select"></select><br><br>
+    <input type="text" id="item_name_kg" placeholder="Name KG">
+    <input type="text" id="item_name_en" placeholder="Name EN">
+    <input type="text" id="item_desc_kg" placeholder="Description KG">
+    <input type="text" id="item_desc_en" placeholder="Description EN">
+    <input type="number" id="item_price" placeholder="Price">
+    <input type="text" id="item_image" placeholder="Image URL">
+    <button id="add-item-btn" onclick="addItem()">Add Item</button>
+</div>
+
+<!-- Category & Item List -->
+<div>
+    <h3>Categories & Items</h3>
+    <div id="list-block"></div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>

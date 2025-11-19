@@ -1,0 +1,42 @@
+package com.example.demo.model;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import jakarta.persistence.*;
+import java.util.List;
+
+@Entity
+public class Category {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
+
+    private String name_kg;
+    private String name_en;
+
+    @Lob
+    private String image_url;
+
+    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnoreProperties("category") // важно! отключает цикличность
+    private List<Item> items;
+
+    // --- Геттеры и сеттеры ---
+    public Integer getId() { return id; }
+
+    public String getName_kg() { return name_kg; }
+
+    public void setName_kg(String name_kg) { this.name_kg = name_kg; }
+
+    public String getName_en() { return name_en; }
+
+    public void setName_en(String name_en) { this.name_en = name_en; }
+
+    public String getImage_url() { return image_url; }
+
+    public void setImage_url(String image_url) { this.image_url = image_url; }
+
+    public List<Item> getItems() { return items; }
+
+    public void setItems(List<Item> items) { this.items = items; }
+}
