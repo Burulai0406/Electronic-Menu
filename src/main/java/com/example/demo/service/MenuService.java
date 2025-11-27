@@ -19,7 +19,6 @@ public class MenuService {
         this.itemRepository = itemRepository;
     }
 
-    // --- Категории ---
     public Category saveCategory(Category category) {
         return categoryRepository.save(category);
     }
@@ -32,7 +31,6 @@ public class MenuService {
         return categoryRepository.findAll();
     }
 
-    // --- Позиции ---
     public Item saveItem(Item item) {
         return itemRepository.save(item);
     }

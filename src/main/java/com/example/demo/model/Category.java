@@ -18,25 +18,20 @@ public class Category {
     private String image_url;
 
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonIgnoreProperties("category") // важно! отключает цикличность
+    @JsonIgnoreProperties("category")
     private List<Item> items;
 
-    // --- Геттеры и сеттеры ---
     public Integer getId() { return id; }
 
     public String getName_kg() { return name_kg; }
-
     public void setName_kg(String name_kg) { this.name_kg = name_kg; }
 
     public String getName_en() { return name_en; }
-
     public void setName_en(String name_en) { this.name_en = name_en; }
 
     public String getImage_url() { return image_url; }
-
     public void setImage_url(String image_url) { this.image_url = image_url; }
 
     public List<Item> getItems() { return items; }
-
     public void setItems(List<Item> items) { this.items = items; }
 }

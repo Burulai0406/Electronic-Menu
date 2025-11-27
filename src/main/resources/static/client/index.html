@@ -2,19 +2,26 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cafe Menu - Client</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 <div id="app">
+    <!-- Выбор языка -->
     <div id="language-block">
         <h2>Choose Language / Тилди тандаңыз</h2>
         <button onclick="setLanguage('kg')">Кыргызча</button>
         <button onclick="setLanguage('en')">English</button>
     </div>
 
+    <!-- Блок категорий -->
     <div id="categories-block" style="display:none;"></div>
+
+    <!-- Блок позиций -->
     <div id="items-block" style="display:none;"></div>
+
+    <!-- Кнопка назад -->
     <button id="back-btn" style="display:none;" onclick="goBack()">Back</button>
 </div>
 

@@ -18,7 +18,6 @@ public class AdminController {
         this.menuService = menuService;
     }
 
-    // --- Категории ---
     @PostMapping("/categories")
     public Category addCategory(@RequestBody Category category) {
         return menuService.saveCategory(category);
@@ -34,7 +33,6 @@ public class AdminController {
         return menuService.getAllCategories();
     }
 
-    // --- Позиции ---
     @PostMapping("/items")
     public Item addItem(@RequestBody Item item) {
         return menuService.saveItem(item);

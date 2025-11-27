@@ -29,7 +29,6 @@ public class Item {
     @JsonIgnoreProperties("items")
     private Category category;
 
-    // --- Геттеры и сеттеры ---
     public Integer getId() { return id; }
 
     public String getName_kg() { return name_kg; }

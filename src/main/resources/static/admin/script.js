@@ -1,4 +1,3 @@
-// Сообщение
 function showMessage(msg, type) {
     const block = document.getElementById('message');
     block.style.color = type === 'success' ? 'green' : 'red';
@@ -6,7 +5,6 @@ function showMessage(msg, type) {
     setTimeout(() => block.innerText = '', 3000);
 }
 
-// Сброс полей категорий и позиций
 function resetCategoryFields() {
     document.getElementById('cat_name_kg').value = '';
     document.getElementById('cat_name_en').value = '';
@@ -22,7 +20,6 @@ function resetItemFields() {
     document.getElementById('item_image').value = '';
 }
 
-// Загрузка категорий в select админки
 function loadCategoriesForAdmin() {
     fetch('/api/admin/categories')
         .then(res => res.json())
@@ -38,7 +35,6 @@ function loadCategoriesForAdmin() {
         });
 }
 
-// Добавление категории
 function addCategory() {
     const data = {
         name_kg: document.getElementById('cat_name_kg').value,
@@ -51,20 +47,19 @@ function addCategory() {
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify(data)
     })
-        .then(res => {
-            if (res.ok) {
-                showMessage('Категория добавлена!', 'success');
-                resetCategoryFields();
-                loadCategoriesForAdmin();
-                loadList();
-            } else {
-                res.text().then(msg => alert('Ошибка: ' + msg));
-            }
-        })
-        .catch(err => alert('Ошибка сети: ' + err));
+    .then(res => {
+        if(res.ok){
+            showMessage('Категория добавлена!', 'success');
+            resetCategoryFields();
+            loadCategoriesForAdmin();
+            loadList();
+        } else {
+            res.text().then(msg => alert('Ошибка: ' + msg));
+        }
+    })
+    .catch(err => alert('Ошибка сети: ' + err));
 }
 
-// Добавление позиции
 function addItem() {
     const data = {
         name_kg: document.getElementById('item_name_kg').value,
@@ -93,7 +88,6 @@ function addItem() {
     .catch(err => alert("Ошибка сети: " + err));
 }
 
-// Загрузка списка категорий и позиций для админки
 function loadList() {
     fetch('/api/admin/categories')
         .then(res => res.json())
@@ -104,7 +98,7 @@ function loadList() {
                 let html = `<strong>${cat.name_en} / ${cat.name_kg}</strong>
                     <button onclick="deleteCategory(${cat.id})">Удалить категорию</button><br>`;
 
-                if (cat.items && cat.items.length > 0) {
+                if(cat.items && cat.items.length > 0){
                     cat.items.forEach(item => {
                         html += `<div>- ${item.name_en} (${item.price})
                             <button onclick="deleteItem(${item.id})">Удалить позицию</button></div>`;
@@ -120,29 +114,16 @@ function loadList() {
         });
 }
 
-// Удаление категории
 function deleteCategory(id) {
     fetch(`/api/admin/categories/${id}`, { method: 'DELETE' })
-        .then(res => {
-            if (res.ok) {
-                showMessage('Категория удалена!', 'success');
-                loadCategoriesForAdmin();
-                loadList();
-            }
-        });
+        .then(res => { if(res.ok){ showMessage('Категория удалена!', 'success'); loadCategoriesForAdmin(); loadList(); } });
 }
 
-// Удаление позиции
 function deleteItem(id) {
     fetch(`/api/admin/items/${id}`, { method: 'DELETE' })
-        .then(res => {
-            if (res.ok) {
-                showMessage('Позиция удалена!', 'success');
-                loadList();
-            }
-        });
+        .then(res => { if(res.ok){ showMessage('Позиция удалена!', 'success'); loadList(); } });
 }
 
-// --- Инициализация ---
+// init
 loadCategoriesForAdmin();
 loadList();
