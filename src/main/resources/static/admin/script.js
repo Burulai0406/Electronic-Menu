@@ -124,6 +124,6 @@ function deleteItem(id) {
         .then(res => { if(res.ok){ showMessage('Позиция удалена!', 'success'); loadList(); } });
 }
 
-// init
+
 loadCategoriesForAdmin();
 loadList();
