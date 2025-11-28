@@ -13,11 +13,12 @@ public class Category {
 
     private String name_kg;
     private String name_en;
+    private String name_ru;
 
     @Lob
     private String image_url;
 
-    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonIgnoreProperties("category")
     private List<Item> items;
 
@@ -28,6 +29,9 @@ public class Category {
 
     public String getName_en() { return name_en; }
     public void setName_en(String name_en) { this.name_en = name_en; }
+
+    public String getName_ru() { return name_ru; }
+    public void setName_ru(String name_ru) { this.name_ru = name_ru; }
 
     public String getImage_url() { return image_url; }
     public void setImage_url(String image_url) { this.image_url = image_url; }

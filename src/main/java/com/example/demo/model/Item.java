@@ -12,12 +12,16 @@ public class Item {
 
     private String name_kg;
     private String name_en;
+    private String name_ru;
 
     @Lob
     private String description_kg;
 
     @Lob
     private String description_en;
+
+    @Lob
+    private String description_ru;
 
     private Double price;
 
@@ -37,11 +41,17 @@ public class Item {
     public String getName_en() { return name_en; }
     public void setName_en(String name_en) { this.name_en = name_en; }
 
+    public String getName_ru() { return name_ru; }
+    public void setName_ru(String name_ru) { this.name_ru = name_ru; }
+
     public String getDescription_kg() { return description_kg; }
     public void setDescription_kg(String description_kg) { this.description_kg = description_kg; }
 
     public String getDescription_en() { return description_en; }
     public void setDescription_en(String description_en) { this.description_en = description_en; }
+
+    public String getDescription_ru() { return description_ru; }
+    public void setDescription_ru(String description_ru) { this.description_ru = description_ru; }
 
     public Double getPrice() { return price; }
     public void setPrice(Double price) { this.price = price; }
