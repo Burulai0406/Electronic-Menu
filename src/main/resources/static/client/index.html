@@ -1,81 +1,346 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="kg">
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Restaurant Menu</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Chai Caffe</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@400;600&display=swap" rel="stylesheet" />
     <style>
         :root{
-          --bg1: #FEFFE7;
+          --bg: #FEFFE7;
+          --text: #1F3B2F;
           --accent: #FED2A0;
         }
-
+        body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased}
+        h1,h2,h3{font-family:'Playfair Display',serif}
+        .btn-primary{background:var(--accent);color:var(--text);transition:transform .18s ease,box-shadow .18s ease}
+        .btn-primary:hover{transform:scale(1.03);box-shadow:0 8px 20px rgba(0,0,0,.12)}
+        /* simple animations (reliable) */
+        .fade-slide-enter{opacity:0;transform:translateY(18px)}
+        .fade-slide-enter.fade-slide-enter-active{opacity:1;transform:none;transition:opacity .36s ease,transform .36s ease}
+        .fade-slide-leave{opacity:1;transform:none}
+        .fade-slide-leave.fade-slide-leave-active{opacity:0;transform:translateY(-10px);transition:opacity .28s ease,transform .28s ease}
+        /* card hover */
+        .menu-card{transition:transform .22s ease,box-shadow .22s ease}
+        .menu-card:hover{transform:translateY(-6px);box-shadow:0 12px 30px rgba(31,59,47,.08)}
+        /* responsive adjustments */
+        @media (max-width:640px){
+          .h-96{height:360px}
+        }
     </style>
 </head>
-<body class="bg-[color:var(--bg1)] text-gray-800 min-h-screen">
-<header class="shadow-md bg-white/50 backdrop-blur-sm sticky top-0 z-20">
-    <div class="max-w-5xl mx-auto flex items-center justify-between p-4">
-        <h1 class="text-2xl font-semibold" id="site-title">Cafe</h1>
+<body class="min-h-screen">
+
+<header class="sticky top-0 z-30 bg-white/70 backdrop-blur-md shadow-sm">
+    <div class="max-w-6xl mx-auto flex items-center justify-between p-4">
+        <h1 class="text-2xl md:text-3xl font-bold flex items-center gap-3">
+            <span class="text-2xl">🍵</span>
+            <span id="brand-title">Chai Caffe</span>
+        </h1>
+
         <nav class="flex items-center gap-3">
-            <button id="aboutBtn" class="px-3 py-1 rounded-md" data-i18n="about">About</button>
-            <button id="menuBtn" class="px-3 py-1 rounded-md" data-i18n="menu">Menu</button>
-            <button id="teamBtn" class="px-3 py-1 rounded-md" data-i18n="team">Team</button>
-            <button id="contactBtn" class="px-3 py-1 rounded-md" data-i18n="contact">Contact</button>
-            <button id="addressBtn" class="px-3 py-1 rounded-md" data-i18n="address">Address</button>
+            <button data-section="about" class="px-3 py-1 rounded-md hover:bg-green-50 transition" data-i18n="about">Биз жөнүндө</button>
+            <button data-section="menu" class="px-3 py-1 rounded-md hover:bg-green-50 transition" data-i18n="menu">Меню</button>
+            <button data-section="contact" class="px-3 py-1 rounded-md hover:bg-green-50 transition" data-i18n="contact">Байланыш</button>
 
             <select id="langSelect" class="ml-3 px-2 py-1 rounded-md border">
-                <option value="en">EN</option>
-                <option value="ru">RU</option>
                 <option value="kg">KG</option>
+                <option value="en">EN</option>
             </select>
         </nav>
     </div>
 </header>
 
-<main class="max-w-5xl mx-auto p-4">
+<main class="max-w-6xl mx-auto p-4">
 
-    <section id="about" class="mb-6 hidden">
-        <div class="bg-white rounded-2xl p-6 shadow">
-            <h2 class="text-xl font-bold mb-2" data-i18n="about_title">About us</h2>
-            <p id="aboutText">Welcome to our cafe.</p>
+    <section id="about" class="mb-12" data-aos="fade-up">
+        <div class="rounded-2xl overflow-hidden shadow-2xl">
+            <img src="https://i.pinimg.com/736x/e3/e8/54/e3e854b3e8101710c7fb95842fcc1055.jpg" alt="Chai Caffe Interior" class="w-full h-96 object-cover">
+            <div class="p-8 bg-white">
+                <h2 class="text-4xl md:text-5xl font-bold mb-4" data-i18n="about_title">Chai Caffe</h2>
+                <p class="text-gray-700 text-base md:text-lg leading-relaxed" data-i18n="about_text"></p>
+            </div>
         </div>
     </section>
 
-    <section id="categories" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+    <section id="menu" class="mb-12">
+        <div id="categories" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
 
-    </section>
-
-
-    <section id="itemsBlock" class="mt-6 hidden">
-        <button id="backToCats" class="mb-4 px-4 py-2 rounded-full" style="background:var(--accent)">← Back</button>
-        <div id="itemsList" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
-    </section>
-
-    <section id="team" class="hidden">
-        <div class="bg-white rounded-2xl p-6 shadow">
-            <h2 class="text-xl font-bold" data-i18n="team_title">Team</h2>
-            <p>Our team information.</p>
+        <div id="itemsBlock" class="mt-6 hidden">
+            <button id="backToCats" class="mb-4 px-4 py-2 btn-primary rounded-full">← Back to categories</button>
+            <div id="itemsList" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
         </div>
     </section>
 
-    <section id="contact" class="hidden">
-        <div class="bg-white rounded-2xl p-6 shadow">
-            <h2 class="text-xl font-bold" data-i18n="contact_title">Contact</h2>
-            <p>Email: info@example.com</p>
-        </div>
-    </section>
+    <section id="contact" class="mb-12 hidden">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div class="bg-white rounded-2xl p-6 shadow-lg">
+                <h2 class="text-3xl font-bold mb-4" data-i18n="contact_title">Байланыш</h2>
+                <p>
+                    Instagram: <a href="https://instagram.com/chai.caffe" target="_blank" class="text-amber-600">@chai.caffe</a><br>
+                    WhatsApp: <a href="https://wa.me/996" target="_blank" class="text-amber-600">+996 709 853 999</a><br>
+                    Address: г. Бишкек, ул. Токтогула 75
+                </p>
+            </div>
 
-    <section id="address" class="hidden">
-        <div class="bg-white rounded-2xl p-6 shadow">
-            <h2 class="text-xl font-bold" data-i18n="address_title">Address</h2>
-            <p>123 Cafe Street</p>
+            <div class="bg-white rounded-2xl shadow-lg overflow-hidden">
+                <iframe class="w-full h-96"
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d5848.123456789!2d74.590123!3d42.874621!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zNDLCsDUyJzI5LjYiTiA3NMKwMzUnMjQuNCJF!5e0!3m2!1sen!2skg!4v..."
+                        loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+            </div>
         </div>
     </section>
 </main>
 
-<footer class="mt-10 p-4 text-center text-sm text-gray-600">© Cafe Menu</footer>
+<footer class="p-6 text-center text-gray-600">
+    © 2025 Chai Caffe • @chai.caffe • Күн сайын 08:00 – 23:00 Сени күтөбүз ♡
+    Daily 08:00 – 23:00 We’re waiting for you ♡
+</footer>
 
-<script src="script.js"></script>
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script>
+    AOS.init({ once: true, duration: 900 });
+
+    const API_BASE = '/api/client';
+    // Only KG and EN
+    let lang = localStorage.getItem('lang') || 'kg';
+    let categoriesData = [];
+    let currentItems = [];
+    let loadingCategory = false; // prevent double clicks while loading
+
+    // i18n (KG + EN only)
+    const i18n = {
+      kg: {
+        about: 'Биз жөнүндө',
+        about_title: 'Chai Caffe',
+        about_text: 'Chai caffe — бул шаардын борборунда жайгашкан уюттуу жер, анда ароматтуу кофе жана салттуу чай кезигет. Биз бардык ингредиенттерди таза жана табигый колдонуп даярдайбыз. Биздин автордук чай менен эс алыңыз, өз колуңуз менен жасалган десерттерди татып көрүңүз жана жылуу атмосферадан ырахат алыңыз. Биз сизди кубаныч менен күтөбүз!',
+        menu: 'Меню',
+        contact: 'Байланыш',
+        contact_title: 'Байланыш'
+      },
+      en: {
+        about: 'About us',
+        about_title: 'Chai Caffe',
+        about_text: 'Chai caffe is a cozy place in the heart of the city where aromatic coffee meets traditional tea. We prepare with love using only fresh, natural ingredients. Relax with our signature tea, try homemade desserts, and enjoy the warm atmosphere. We are happy to welcome you!',
+        menu: 'Menu',
+        contact: 'Contact',
+        contact_title: 'Contact'
+      }
+    };
+
+    // helpers for animation toggles (reliable)
+    function animateIn(el){
+      el.classList.remove('fade-slide-leave','fade-slide-leave-active');
+      el.classList.add('fade-slide-enter');
+      // force reflow then add active
+      requestAnimationFrame(()=>{
+        el.classList.add('fade-slide-enter-active');
+        // cleanup after transition
+        setTimeout(()=>el.classList.remove('fade-slide-enter','fade-slide-enter-active'),400);
+      });
+    }
+    function animateOut(el, cb){
+      el.classList.remove('fade-slide-enter','fade-slide-enter-active');
+      el.classList.add('fade-slide-leave');
+      requestAnimationFrame(()=>{
+        el.classList.add('fade-slide-leave-active');
+        setTimeout(()=>{
+          el.classList.remove('fade-slide-leave','fade-slide-leave-active');
+          cb && cb();
+        },320);
+      });
+    }
+
+    // DOM refs
+    const elements = document.querySelectorAll('[data-i18n]');
+    const langSelect = document.getElementById('langSelect');
+    const categoriesContainer = document.getElementById('categories');
+    const itemsBlock = document.getElementById('itemsBlock');
+    const itemsList = document.getElementById('itemsList');
+    const backBtn = document.getElementById('backToCats');
+
+    // Apply translations
+    function applyI18n(){
+      elements.forEach(el=>{
+        const key = el.dataset.i18n;
+        if(!key) return;
+        el.innerHTML = (i18n[lang] && i18n[lang][key]) ? i18n[lang][key] : (i18n['en'][key] || key);
+      });
+    }
+
+    // Language handling
+    langSelect.value = lang;
+    langSelect.addEventListener('change', (e)=>{
+      lang = e.target.value;
+      localStorage.setItem('lang', lang);
+      applyI18n();
+      // re-render visible content in new language
+      if(!itemsBlock.classList.contains('hidden')) renderItems(); else renderCategories();
+    });
+
+    applyI18n();
+
+    // Section nav (header buttons)
+    document.querySelectorAll('button[data-section]').forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        const id = btn.dataset.section;
+        ['about','menu','itemsBlock','contact'].forEach(s=>{
+          const el = document.getElementById(s);
+          if(!el) return;
+          if(s === id) {
+            el.classList.remove('hidden');
+            animateIn(el);
+          } else {
+            el.classList.add('hidden');
+          }
+        });
+        // if returning to menu ensure categories shown
+        if(id === 'menu'){
+          itemsBlock.classList.add('hidden');
+          categoriesContainer.classList.remove('hidden');
+        }
+      });
+    });
+
+    // Fetch categories from API
+    async function fetchCategories(){
+      try{
+        const res = await fetch(`${API_BASE}/categories`);
+        const data = await res.json();
+        categoriesData = Array.isArray(data) ? data : [];
+        renderCategories();
+      }catch(err){
+        console.error('fetchCategories error', err);
+        categoriesData = [];
+        categoriesContainer.innerHTML = `<div class="text-red-600 p-4">Ошибка загрузки категорий</div>`;
+      }
+    }
+
+    // Render categories (no search)
+    function renderCategories(){
+      categoriesContainer.innerHTML = '';
+      itemsBlock.classList.add('hidden');
+      categoriesContainer.classList.remove('hidden');
+      // animate container
+      animateIn(categoriesContainer);
+
+      if(!categoriesData.length){
+        categoriesContainer.innerHTML = `<div class="p-6 bg-white rounded-2xl shadow text-gray-600">Категорий нет</div>`;
+        return;
+      }
+
+      categoriesData.forEach(cat=>{
+        const name = (lang === 'kg' ? (cat.name_kg || cat.name_en) : (cat.name_en || cat.name_kg));
+        const img = cat.image_url || '/assets/placeholder.png';
+        const card = document.createElement('div');
+        card.className = 'bg-white rounded-2xl p-4 shadow menu-card cursor-pointer flex flex-col items-center';
+        card.innerHTML = `
+          <img src="${img}" alt="${escapeHtml(name)}" class="w-full h-40 object-cover rounded-lg mb-3">
+          <h3 class="text-lg font-semibold text-center">${escapeHtml(name)}</h3>
+        `;
+        // click handler: show items immediately and load
+        card.addEventListener('click', ()=> onCategoryClick(cat.id, card));
+        categoriesContainer.appendChild(card);
+      });
+    }
+
+    // safe text escape
+    function escapeHtml(s){ return String(s||'').replace(/[&<>"']/g, c=>({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c])); }
+
+    // click category
+    async function onCategoryClick(categoryId, clickedCard){
+      if(loadingCategory) return; // prevent double
+      loadingCategory = true;
+
+      // immediately hide categories and show itemsBlock (instant UX)
+      // but animate categories out first for smoothness OR hide instantly to ensure immediate show
+      // We'll hide instantly for reliability:
+      categoriesContainer.classList.add('hidden');
+      itemsBlock.classList.remove('hidden');
+      // prepare empty itemsList and animate in
+      itemsList.innerHTML = `<div class="col-span-full p-6 bg-white rounded-2xl shadow text-gray-500">Loading...</div>`;
+      itemsBlock.style.opacity = 0;
+      requestAnimationFrame(()=> {
+        itemsBlock.style.transition = 'opacity .32s ease, transform .32s ease';
+        itemsBlock.style.transform = 'translateY(8px)';
+        itemsBlock.style.opacity = 1;
+        setTimeout(()=> itemsBlock.style.transform = 'none', 20);
+      });
+
+      try{
+        const res = await fetch(`${API_BASE}/items/${categoryId}`);
+        const data = await res.json();
+        currentItems = Array.isArray(data) ? data : [];
+        renderItems(); // render with currentItems
+      }catch(err){
+        console.error('loadItems error', err);
+        itemsList.innerHTML = `<div class="col-span-full p-6 bg-white rounded-2xl shadow text-red-600">Ошибка загрузки блюд</div>`;
+      } finally {
+        loadingCategory = false;
+      }
+    }
+
+    // Render items (no search)
+    function renderItems(){
+      itemsList.innerHTML = '';
+      if(!currentItems.length){
+        itemsList.innerHTML = `<div class="col-span-full p-6 bg-white rounded-2xl shadow text-gray-600">Блюд нет</div>`;
+        return;
+      }
+      // create cards
+      currentItems.forEach(item=>{
+        const name = (lang === 'kg' ? (item.name_kg || item.name_en) : (item.name_en || item.name_kg));
+        const desc = (lang === 'kg' ? (item.description_kg || item.description_en || '') : (item.description_en || item.description_kg || ''));
+        const img = item.image_url || '/assets/placeholder.png';
+        const priceLabel = (lang === 'kg' ? 'Баасы' : 'Price');
+        const price = item.price ?? '---';
+
+        const card = document.createElement('div');
+        card.className = 'bg-white rounded-2xl p-4 shadow menu-card';
+        card.innerHTML = `
+          <div class="w-full h-44 md:h-36 overflow-hidden rounded-lg mb-3">
+            <img src="${img}" alt="${escapeHtml(name)}" class="w-full h-full object-cover">
+          </div>
+          <h4 class="font-semibold text-lg mb-1">${escapeHtml(name)}</h4>
+          <p class="text-sm text-gray-600 mb-3">${escapeHtml(desc)}</p>
+          <div class="mt-auto font-medium">${priceLabel}: ${escapeHtml(price)} сом</div>
+        `;
+        // staggered animation for cards
+        card.style.opacity = 0;
+        card.style.transform = 'translateY(12px)';
+        itemsList.appendChild(card);
+        // stagger
+        const idx = itemsList.children.length;
+        setTimeout(()=> {
+          card.style.transition = 'opacity .36s ease, transform .36s ease';
+          card.style.opacity = 1;
+          card.style.transform = 'none';
+        }, 40 * idx);
+      });
+      // scroll into view
+      itemsBlock.scrollIntoView({behavior:'smooth', block:'start'});
+    }
+
+    // Back button
+    backBtn.addEventListener('click', ()=>{
+      // animate hide itemsBlock quickly
+      itemsBlock.style.transition = 'opacity .28s ease, transform .28s ease';
+      itemsBlock.style.opacity = 0;
+      itemsBlock.style.transform = 'translateY(10px)';
+      setTimeout(()=>{
+        itemsBlock.classList.add('hidden');
+        // show categories again
+        renderCategories();
+        // reset current items
+        currentItems = [];
+      }, 300);
+    });
+
+    // Initialize
+    fetchCategories();
+
+</script>
 </body>
 </html>

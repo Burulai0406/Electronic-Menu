@@ -20,7 +20,6 @@ public class AdminController {
         this.menuService = menuService;
     }
 
-    // Categories
     @GetMapping("/categories")
     public List<Category> getCategories() {
         return menuService.getAllCategories();
@@ -38,10 +37,8 @@ public class AdminController {
         return ResponseEntity.ok().build();
     }
 
-    // Items
     @PostMapping("/items")
     public ResponseEntity<?> createItem(@RequestBody Item item) {
-        // sanity check: category must exist
         if (item.getCategory() == null || item.getCategory().getId() == null) {
             return ResponseEntity.badRequest().body("Category required");
         }

@@ -114,7 +114,6 @@ function loadItems(categoryId, categoryName){
         list.appendChild(card);
       });
 
-      // show items section
       showSection('itemsBlock');
       document.getElementById('itemsBlock').scrollIntoView({ behavior: 'smooth' });
     })

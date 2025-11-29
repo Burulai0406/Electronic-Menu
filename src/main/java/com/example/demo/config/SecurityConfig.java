@@ -1,54 +1,66 @@
 package com.example.demo.config;
 
-
-
-import org.springframework.beans.factory.annotation.Value;
+import com.example.demo.repository.AdminRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.Customizer;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.core.userdetails.*;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 public class SecurityConfig {
 
-    @Value("${app.admin.username:admin}")
-    private String adminUsername;
+    private final AdminRepository adminRepository;
 
-    @Value("${app.admin.password:admin123}")
-    private String adminPassword;
+    public SecurityConfig(AdminRepository adminRepository) {
+        this.adminRepository = adminRepository;
+    }
 
     @Bean
-    public InMemoryUserDetailsManager userDetailsService(PasswordEncoder passwordEncoder) {
-        UserDetails admin = User.withUsername(adminUsername)
-                .password(passwordEncoder.encode(adminPassword))
-                .roles("ADMIN")
-                .build();
-        return new InMemoryUserDetailsManager(admin);
+    public UserDetailsService userDetailsService() {
+        return username -> {
+            var admin = adminRepository.findByLogin(username)
+                    .orElseThrow(() -> new UsernameNotFoundException("Admin not found"));
+            return User.builder()
+                    .username(admin.getLogin())
+                    .password(admin.getPassword())
+                    .roles("ADMIN")
+                    .build();
+        };
+    }
+
+    @Bean
+    public BCryptPasswordEncoder encoder() {
+        return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public DaoAuthenticationProvider provider() {
+        DaoAuthenticationProvider p = new DaoAuthenticationProvider();
+        p.setUserDetailsService(userDetailsService());
+        p.setPasswordEncoder(encoder());
+        return p;
     }
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http
-                .csrf(csrf -> csrf.disable())
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/admin/**").authenticated()
-                        .requestMatchers("/api/client/**").permitAll()
-                        .requestMatchers("/","/index.html","/client.html","/admin.html","/static/**","/assets/**").permitAll()
-                        .anyRequest().permitAll()
-                )
-                .httpBasic(Customizer.withDefaults())
-                .formLogin(form -> form.disable()); // we use basic auth for API calls from admin panel
-        return http.build();
-    }
+        http.csrf(csrf -> csrf.disable());
+        http.cors(cors -> {});
 
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
+        http.authorizeHttpRequests(auth -> auth
+                // PUBLIC
+                .requestMatchers("/", "/index.html", "/css/**", "/js/**", "/images/**", "/static/**", "/menu/**")
+                .permitAll()
+                // ADMIN API
+                .requestMatchers("/api/admin/**").authenticated()
+                .anyRequest().permitAll()
+        );
+
+        http.httpBasic(Customizer.withDefaults());
+
+        return http.build();
     }
 }

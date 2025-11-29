@@ -31,16 +31,16 @@
         <div class="mt-4">
             <button id="loginBtn" class="px-4 py-2 rounded" style="background:var(--accent)">Login</button>
         </div>
-        <p class="mt-3 text-sm text-gray-500">Use same credentials as configured in backend.</p>
+        <p class="mt-3 text-sm text-gray-500">Use admin credentials.</p>
     </div>
 
     <div id="adminPanel" class="hidden mt-6">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
             <div class="bg-white p-4 rounded-2xl shadow">
                 <h3 class="font-semibold mb-2">Add Category</h3>
-                <input id="cat_name_kg" placeholder="Name KG" class="w-full p-2 border rounded mb-2" />
-                <input id="cat_name_ru" placeholder="Name RU" class="w-full p-2 border rounded mb-2" />
-                <input id="cat_name_en" placeholder="Name EN" class="w-full p-2 border rounded mb-2" />
+                <input id="cat_name_kg" placeholder="Name (KG)" class="w-full p-2 border rounded mb-2" />
+                <input id="cat_name_en" placeholder="Name (EN)" class="w-full p-2 border rounded mb-2" />
                 <input id="cat_image" placeholder="Image URL" class="w-full p-2 border rounded mb-2" />
                 <button id="add-category-btn" class="px-4 py-2 rounded" style="background:var(--accent)">Add Category</button>
             </div>
@@ -48,14 +48,16 @@
             <div class="bg-white p-4 rounded-2xl shadow">
                 <h3 class="font-semibold mb-2">Add Item</h3>
                 <select id="category_select" class="w-full p-2 border rounded mb-2"></select>
-                <input id="item_name_kg" placeholder="Name KG" class="w-full p-2 border rounded mb-2" />
-                <input id="item_name_ru" placeholder="Name RU" class="w-full p-2 border rounded mb-2" />
-                <input id="item_name_en" placeholder="Name EN" class="w-full p-2 border rounded mb-2" />
-                <textarea id="item_desc_kg" placeholder="Description KG" class="w-full p-2 border rounded mb-2"></textarea>
-                <textarea id="item_desc_ru" placeholder="Description RU" class="w-full p-2 border rounded mb-2"></textarea>
-                <textarea id="item_desc_en" placeholder="Description EN" class="w-full p-2 border rounded mb-2"></textarea>
+
+                <input id="item_name_kg" placeholder="Name (KG)" class="w-full p-2 border rounded mb-2" />
+                <input id="item_name_en" placeholder="Name (EN)" class="w-full p-2 border rounded mb-2" />
+
+                <textarea id="item_desc_kg" placeholder="Description (KG)" class="w-full p-2 border rounded mb-2"></textarea>
+                <textarea id="item_desc_en" placeholder="Description (EN)" class="w-full p-2 border rounded mb-2"></textarea>
+
                 <input id="item_price" placeholder="Price" type="number" class="w-full p-2 border rounded mb-2" />
                 <input id="item_image" placeholder="Image URL" class="w-full p-2 border rounded mb-2" />
+
                 <button id="add-item-btn" class="px-4 py-2 rounded" style="background:var(--accent)">Add Item</button>
             </div>
         </div>
