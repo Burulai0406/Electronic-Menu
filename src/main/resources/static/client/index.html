@@ -29,6 +29,59 @@
         @media (max-width:640px){
           .h-96{height:360px}
         }
+        /* Делаем навигацию идеально центрированной на десктопе */
+header nav {
+    display: flex;
+    justify-content: center;     /* центрируем кнопки */
+    flex-grow: 1;                /* nav растягивается на всё доступное место */
+}
+
+/* На маленьких экранах (≤768px) превращаем в аккуратное вертикальное меню-бургер */
+/* Мобильное меню — выдвигается сверху */
+@media (max-width: 768px) {
+    header nav {
+        position: fixed;
+        top: 0; left: 0; right: 0;
+        background: rgba(255, 255, 255, 0.97);
+        backdrop-blur-lg;
+        flex-direction: column;
+        align-items: center;
+        padding-top: 6rem;
+        gap: 2rem;
+        transform: translateY(-100%);
+        transition: transform 0.4s ease;
+        z-index: 40;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    }
+
+    header nav.open {
+        transform: translateY(0);
+    }
+
+    header nav button,
+    header nav select {
+        width: 80%;
+        max-width: 300px;
+        padding: 1rem;
+        font-size: 1.1rem;
+        text-align: center;
+    }
+}
+
+/* Бургер-иконка */
+.burger span {
+    display: block;
+    width: 28px;
+    height: 3px;
+    background: #1F3B2F;
+    margin: 6px 0;
+    transition: 0.3s;
+    border-radius: 2px;
+}
+
+.burger.open span:nth-child(1) { transform: rotate(45deg) translate(9px, 9px); }
+.burger.open span:nth-child(2) { opacity: 0; }
+.burger.open span:nth-child(3) { transform: rotate(-45deg) translate(7px, -7px); }
     </style>
 </head>
 <body class="min-h-screen">
@@ -36,16 +89,37 @@
 <header class="sticky top-0 z-30 bg-white/70 backdrop-blur-md shadow-sm">
     <div class="max-w-6xl mx-auto flex items-center justify-between p-4">
         <h1 class="text-2xl md:text-3xl font-bold flex items-center gap-3">
+            <div class="burger md:hidden" id="burger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
             <span class="text-2xl">🍵</span>
             <span id="brand-title">Chai Caffe</span>
         </h1>
 
-        <nav class="flex items-center gap-3">
-            <button data-section="about" class="px-3 py-1 rounded-md hover:bg-green-50 transition" data-i18n="about">Биз жөнүндө</button>
-            <button data-section="menu" class="px-3 py-1 rounded-md hover:bg-green-50 transition" data-i18n="menu">Меню</button>
-            <button data-section="contact" class="px-3 py-1 rounded-md hover:bg-green-50 transition" data-i18n="contact">Байланыш</button>
+        <nav class="flex items-center
+                    justify-center          <!-- центрируем содержимое nav -->
+                    flex-1                  <!-- nav занимает всё свободное место -->
+                    gap-4                   <!-- чуть больше отступов, выглядит лучше -->
+                    max-md:gap-3">          <!-- на планшетах и ниже чуть меньше -->
 
-            <select id="langSelect" class="ml-3 px-2 py-1 rounded-md border">
+            <button data-section="about"
+                    class="px-4 py-2 rounded-md hover:bg-green-50 transition whitespace-nowrap"
+                    data-i18n="about">Биз жөнүндө</button>
+
+            <button data-section="menu"
+                    class="px-4 py-2 rounded-md hover:bg-green-50 transition whitespace-nowrap"
+                    data-i18n="menu">Меню</button>
+
+            <button data-section="contact"
+                    class="px-4 py-2 rounded-md hover:bg-green-50 transition whitespace-nowrap"
+                    data-i18n="contact">Байланыш</button>
+
+            <!-- Селектор языка вынесли в правый угол -->
+            <select id="langSelect"
+                    class="ml-8 px-3 py-2 rounded-md border border-gray-300
+                           focus:outline-none focus:ring-2 focus:ring-amber-400">
                 <option value="kg">KG</option>
                 <option value="en">EN</option>
             </select>
@@ -490,7 +564,26 @@ updateCarousel(); // инициализация
 
     // Initialize
     fetchCategories();
+    // === МОБИЛЬНОЕ БУРГЕР-МЕНЮ ===
+const burger = document.getElementById('burger');
+const nav = document.querySelector('header nav');
 
+if (burger && nav) {
+    burger.addEventListener('click', () => {
+        burger.classList.toggle('open');
+        nav.classList.toggle('open');
+    });
+
+    // Закрывать меню при клике на пункт
+    document.querySelectorAll('header nav button[data-section]').forEach(btn => {
+        btn.addEventListener('click', () => {
+            if (window.innerWidth <= 768) {
+                burger.classList.remove('open');
+                nav.classList.remove('open');
+            }
+        });
+    });
+}
 </script>
 </body>
 </html>
