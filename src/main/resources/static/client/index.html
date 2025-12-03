@@ -88,35 +88,17 @@ header nav {
 
 <header class="sticky top-0 z-30 bg-white/70 backdrop-blur-md shadow-sm">
     <div class="max-w-6xl mx-auto flex items-center justify-between p-4">
+
         <h1 class="text-2xl md:text-3xl font-bold flex items-center gap-3">
-            <div class="burger md:hidden" id="burger">
-                <span></span>
-                <span></span>
-                <span></span>
-            </div>
             <span class="text-2xl">🍵</span>
             <span id="brand-title">Chai Caffe</span>
         </h1>
 
-        <nav class="flex items-center
-                    justify-center          <!-- центрируем содержимое nav -->
-                    flex-1                  <!-- nav занимает всё свободное место -->
-                    gap-4                   <!-- чуть больше отступов, выглядит лучше -->
-                    max-md:gap-3">          <!-- на планшетах и ниже чуть меньше -->
+        <nav class="flex items-center justify-center flex-1 gap-4 max-md:gap-3">
+            <button data-section="about" class="px-4 py-2 rounded-md hover:bg-green-50 transition whitespace-nowrap" data-i18n="about">Биз жөнүндө</button>
+            <button data-section="menu" class="px-4 py-2 rounded-md hover:bg-green-50 transition whitespace-nowrap" data-i18n="menu">Меню</button>
+            <button data-section="contact" class="px-4 py-2 rounded-md hover:bg-green-50 transition whitespace-nowrap" data-i18n="contact">Байланыш</button>
 
-            <button data-section="about"
-                    class="px-4 py-2 rounded-md hover:bg-green-50 transition whitespace-nowrap"
-                    data-i18n="about">Биз жөнүндө</button>
-
-            <button data-section="menu"
-                    class="px-4 py-2 rounded-md hover:bg-green-50 transition whitespace-nowrap"
-                    data-i18n="menu">Меню</button>
-
-            <button data-section="contact"
-                    class="px-4 py-2 rounded-md hover:bg-green-50 transition whitespace-nowrap"
-                    data-i18n="contact">Байланыш</button>
-
-            <!-- Селектор языка вынесли в правый угол -->
             <select id="langSelect"
                     class="ml-8 px-3 py-2 rounded-md border border-gray-300
                            focus:outline-none focus:ring-2 focus:ring-amber-400">
@@ -124,8 +106,17 @@ header nav {
                 <option value="en">EN</option>
             </select>
         </nav>
+
+        <!-- 🔥 БУРГЕР ПЕРЕНЕСЁН СЮДА (правый верхний угол) -->
+        <div class="burger md:hidden" id="burger">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+
     </div>
 </header>
+
 <!-- Анимированный карусель с акциями — улучшенная читаемость -->
 <div class="relative overflow-hidden bg-gradient-to-r from-amber-50 to-orange-50">
     <div id="promoCarousel" class="flex transition-transform duration-700 ease-in-out" style="transform: translateX(0)">
