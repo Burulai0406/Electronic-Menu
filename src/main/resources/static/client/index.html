@@ -104,28 +104,81 @@ header nav {
 #closeBurger:active {
     transform: scale(0.92);
 }
+  /* Аккуратное выравнивание блока бонусов на мобильных */
+@media (max-width: 768px) {
+  #bonus-balance {
+    font-size: 1rem;
+  }
+  #get-bonuses-btn {
+    padding: 0.5rem 1rem;
+    font-size: 0.95rem;
+  }
+  h1 .ml-auto {
+    margin-left: 0 !important;
+    width: 100%;
+    justify-content: center;
+    margin-top: 0.5rem;
+  }
+}
+
+/* На десктопе — всё в одну строку, кнопка справа */
+@media (min-width: 769px) {
+  h1 > .ml-auto {
+    margin-left: auto;
+  }
+}
     </style>
 </head>
 <body class="min-h-screen">
 
 <header class="sticky top-0 z-30 bg-white/70 backdrop-blur-md shadow-sm">
     <div class="max-w-6xl mx-auto flex items-center justify-between p-4">
-
-        <h1 class="text-2xl md:text-3xl font-bold flex items-center gap-3">
-            <span class="text-2xl">🍵</span>
-            <span id="brand-title">Chai Caffe</span>
+        <h1 class="text-2xl md:text-3xl font-bold flex items-center gap-3 flex-wrap">
+            <span class="text-2xl">Chai Caffe</span>
         </h1>
-
         <nav class="flex items-center justify-center flex-1 gap-4 max-md:gap-3">
             <button data-section="about" class="px-4 py-2 rounded-md hover:bg-green-50 transition whitespace-nowrap" data-i18n="about">Биз жөнүндө</button>
             <button data-section="menu" class="px-4 py-2 rounded-md hover:bg-green-50 transition whitespace-nowrap" data-i18n="menu">Меню</button>
             <button data-section="contact" class="px-4 py-2 rounded-md hover:bg-green-50 transition whitespace-nowrap" data-i18n="contact">Байланыш</button>
 
-            <select id="langSelect" class="ml-8 px-3 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-amber-400 max-md:hidden">
+            <!-- Десктоп: в одну строку после "Байланыш" -->
+            <div class="hidden md:flex items-center gap-5">
+        <span id="bonus-balance-desktop"
+              class="text-lg font-medium text-gray-700 whitespace-nowrap"
+              data-i18n="bonus_balance_label">
+            Бонус балансы: <span id="bonus-amount">0</span>
+        </span>
+
+                <button id="get-bonuses-btn"
+                        class="px-5 py-2.5 btn-primary rounded-full font-semibold whitespace-nowrap transition-transform hover:scale-105"
+                        data-i18n="get_bonuses">
+                    Бонус алуу
+                </button>
+            </div>
+
+            <!-- Мобильная версия: отдельные красивые пункты в бургер-меню -->
+            <div class="flex md:hidden flex-col items-center gap-4 w-full max-w-xs mx-auto">
+                <div class="py-3 text-center">
+            <span class="text-lg font-medium text-gray-700"
+                  data-i18n="bonus_balance_label">
+                Бонус балансы: <span id="bonus-amount-mobile">0</span>
+            </span>
+                </div>
+
+                <button id="get-bonuses-btn-mobile"
+                        class="w-full py-3 btn-primary rounded-full font-semibold text-base"
+                        data-i18n="get_bonuses">
+                    Бонус алуу
+                </button>
+            </div>
+
+            <!-- Переключатель языка (десктоп) -->
+            <select id="langSelect" class="ml-4 px-3 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-amber-400 max-md:hidden">
                 <option value="kg">KG</option>
                 <option value="en">EN</option>
             </select>
 
+            <!-- Переключатель языка (мобильный) -->
             <div class="lang-toggle-mobile hidden max-md:flex items-center gap-3 mt-4">
                 <button type="button" class="lang-btn-m px-5 py-2.5 text-sm font-medium rounded-full transition-all" data-lang="kg">KG</button>
                 <span class="text-gray-400">/</span>
@@ -146,7 +199,6 @@ header nav {
                 </svg>
             </button>
         </div>
-
     </div>
 </header>
 
@@ -296,7 +348,10 @@ const i18n = {
     promo2_title: "2 десерт = 1 баасы",
     promo2_sub: "1000 сомдон жогору заказга",
     promo3_title: "Кышкы меню келди!",
-    promo3_sub: "Ысык шоколад жана имбир чай ♡"
+    promo3_sub: "Ысык шоколад жана имбир чай ♡",   // ← запятая есть
+
+    get_bonuses: "Бонус алуу",
+    bonus_balance_label: "Бонус балансы"
   },
   en: {
     about: 'About us',
@@ -306,13 +361,15 @@ const i18n = {
     contact: 'Contact',
     contact_title: 'Contact',
 
-
     promo1_title: "–20% on all tea!",
     promo1_sub: "Only until December 10",
     promo2_title: "2 desserts = 1 price",
     promo2_sub: "For orders over 1000 som",
     promo3_title: "Winter menu is here!",
-    promo3_sub: "Hot chocolate & ginger tea ♡"
+    promo3_sub: "Hot chocolate & ginger tea ♡",   // ← запятая есть
+
+    get_bonuses: "Get Bonuses",
+    bonus_balance_label: "Bonus Balance"
   }
 };
 
@@ -593,7 +650,21 @@ updateCarousel();
                 }
             });
         });
-    }
+        // Синхронизация отображаемого баланса на всех устройствах
+document.querySelectorAll('#bonus-amount, #bonus-amount-mobile').forEach(el => {
+    el.textContent = localStorage.getItem('bonusAmount') || '0';
+});
+
+// Пример обновления баланса (когда бонусы начисляются)
+function updateBonusAmount(newAmount) {
+    const amount = newAmount.toString();
+    localStorage.setItem('bonusAmount', amount);
+    document.querySelectorAll('#bonus-amount, #bonus-amount-mobile').forEach(el => {
+        el.textContent = amount;
+    });
+}
+}
+
 </script>
 </body>
 </html>
