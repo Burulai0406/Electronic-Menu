@@ -50,7 +50,6 @@
 			<scope>test</scope>
 		</dependency>
 
-		<!-- lombok (optional) -->
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>

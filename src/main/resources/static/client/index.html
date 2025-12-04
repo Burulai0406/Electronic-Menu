@@ -29,15 +29,14 @@
         @media (max-width:640px){
           .h-96{height:360px}
         }
-        /* Делаем навигацию идеально центрированной на десктопе */
+
 header nav {
     display: flex;
-    justify-content: center;     /* центрируем кнопки */
-    flex-grow: 1;                /* nav растягивается на всё доступное место */
+    justify-content: center;
+    flex-grow: 1;
 }
 
-/* На маленьких экранах (≤768px) превращаем в аккуратное вертикальное меню-бургер */
-/* Мобильное меню — выдвигается сверху */
+
 @media (max-width: 768px) {
     header nav {
         position: fixed;
@@ -68,7 +67,7 @@ header nav {
     }
 }
 
-/* Бургер-иконка */
+
 .burger span {
     display: block;
     width: 28px;
@@ -82,6 +81,29 @@ header nav {
 .burger.open span:nth-child(1) { transform: rotate(45deg) translate(9px, 9px); }
 .burger.open span:nth-child(2) { opacity: 0; }
 .burger.open span:nth-child(3) { transform: rotate(-45deg) translate(7px, -7px); }
+
+#burger.open ~ #closeBurger,
+#burger:not(.open) ~ #closeBurger {
+    opacity: 0;
+    pointer-events: none;
+}
+
+#burger.open ~ #closeBurger {
+    opacity: 0.9;
+    pointer-events: auto;
+}
+
+#closeBurger {
+    transition: opacity 0.25s ease;
+}
+
+#closeBurger:hover {
+    opacity: 1 !important;
+}
+
+#closeBurger:active {
+    transform: scale(0.92);
+}
     </style>
 </head>
 <body class="min-h-screen">
@@ -99,31 +121,40 @@ header nav {
             <button data-section="menu" class="px-4 py-2 rounded-md hover:bg-green-50 transition whitespace-nowrap" data-i18n="menu">Меню</button>
             <button data-section="contact" class="px-4 py-2 rounded-md hover:bg-green-50 transition whitespace-nowrap" data-i18n="contact">Байланыш</button>
 
-            <select id="langSelect"
-                    class="ml-8 px-3 py-2 rounded-md border border-gray-300
-                           focus:outline-none focus:ring-2 focus:ring-amber-400">
+            <select id="langSelect" class="ml-8 px-3 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-amber-400 max-md:hidden">
                 <option value="kg">KG</option>
                 <option value="en">EN</option>
             </select>
+
+            <div class="lang-toggle-mobile hidden max-md:flex items-center gap-3 mt-4">
+                <button type="button" class="lang-btn-m px-5 py-2.5 text-sm font-medium rounded-full transition-all" data-lang="kg">KG</button>
+                <span class="text-gray-400">/</span>
+                <button type="button" class="lang-btn-m px-5 py-2.5 text-sm font-medium rounded-full transition-all" data-lang="en">EN</button>
+            </div>
         </nav>
 
-        <!-- 🔥 БУРГЕР ПЕРЕНЕСЁН СЮДА (правый верхний угол) -->
-        <div class="burger md:hidden" id="burger">
-            <span></span>
-            <span></span>
-            <span></span>
+        <div class="relative md:hidden">
+            <button type="button" id="burger" class="burger z-50">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <button type="button" id="closeBurger" class="absolute inset-0 flex items-center justify-center z-50 opacity-0 pointer-events-none transition-opacity">
+                <svg class="w-7 h-7" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="1.6" stroke-linecap="round">
+                    <path d="M6 18L18 6" />
+                    <path d="M6 6l12 12" />
+                </svg>
+            </button>
         </div>
 
     </div>
 </header>
 
-<!-- Анимированный карусель с акциями — улучшенная читаемость -->
 <div class="relative overflow-hidden bg-gradient-to-r from-amber-50 to-orange-50">
     <div id="promoCarousel" class="flex transition-transform duration-700 ease-in-out" style="transform: translateX(0)">
 
-        <!-- Слайд 1 -->
         <div class="min-w-full relative">
-            <img src="https://images.unsplash.com/photo-1550258983-7b2a4f9e3dd5?w=1400&q=80"
+            <img src="https://i.pinimg.com/736x/33/44/b4/3344b471b8ae59206338a60703ed541b.jpg"
                  alt="Tea promotion" class="w-full h-96 object-cover brightness-75">
             <div class="absolute inset-0 flex items-center justify-center">
                 <div class="text-center px-8 py-6 rounded-2xl bg-black/40 backdrop-blur-sm max-w-2xl">
@@ -141,9 +172,8 @@ header nav {
             </div>
         </div>
 
-        <!-- Слайд 2 -->
         <div class="min-w-full relative">
-            <img src="https://images.unsplash.com/photo-1512568400610-62da28bc8a13?w=1400&q=80"
+            <img src="https://i.pinimg.com/736x/bc/4a/88/bc4a8859a2496dcd52ae7fad80d35627.jpg"
                  alt="Dessert promotion" class="w-full h-96 object-cover brightness-75">
             <div class="absolute inset-0 flex items-center justify-center">
                 <div class="text-center px-8 py-6 rounded-2xl bg-black/40 backdrop-blur-sm max-w-2xl">
@@ -161,9 +191,8 @@ header nav {
             </div>
         </div>
 
-        <!-- Слайд 3 -->
         <div class="min-w-full relative">
-            <img src="https://images.unsplash.com/photo-1495474472287-4d71bc168240?w=1400&q=80"
+            <img src="https://i.pinimg.com/736x/db/6c/86/db6c86048584f07559af974e5030c5b5.jpg"
                  alt="Winter menu" class="w-full h-96 object-cover brightness-75">
             <div class="absolute inset-0 flex items-center justify-center">
                 <div class="text-center px-8 py-6 rounded-2xl bg-black/40 backdrop-blur-sm max-w-2xl">
@@ -182,7 +211,6 @@ header nav {
         </div>
     </div>
 
-    <!-- Кнопки и точки -->
     <button id="prevSlide" class="absolute left-4 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white rounded-full p-4 shadow-xl transition z-10">
         ←
     </button>
@@ -248,9 +276,7 @@ header nav {
 <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
 <script>
     AOS.init({ once: true, duration: 900 });
-
     const API_BASE = '/api/client';
-    // Only KG and EN
     let lang = localStorage.getItem('lang') || 'kg';
     let categoriesData = [];
     let currentItems = [];
@@ -265,7 +291,6 @@ const i18n = {
     contact: 'Байланыш',
     contact_title: 'Байланыш',
 
-    // ←←← НОВЫЕ СТРОКИ ДЛЯ КАРУСЕЛИ (KG) ←←←
     promo1_title: "Бардык чайга –20%!",
     promo1_sub: "10-декабрга чейин гана",
     promo2_title: "2 десерт = 1 баасы",
@@ -281,7 +306,7 @@ const i18n = {
     contact: 'Contact',
     contact_title: 'Contact',
 
-    // ←←← НОВЫЕ СТРОКИ ДЛЯ КАРУСЕЛИ (EN) ←←←
+
     promo1_title: "–20% on all tea!",
     promo1_sub: "Only until December 10",
     promo2_title: "2 desserts = 1 price",
@@ -291,14 +316,11 @@ const i18n = {
   }
 };
 
-    // helpers for animation toggles (reliable)
     function animateIn(el){
       el.classList.remove('fade-slide-leave','fade-slide-leave-active');
       el.classList.add('fade-slide-enter');
-      // force reflow then add active
       requestAnimationFrame(()=>{
         el.classList.add('fade-slide-enter-active');
-        // cleanup after transition
         setTimeout(()=>el.classList.remove('fade-slide-enter','fade-slide-enter-active'),400);
       });
     }
@@ -314,7 +336,6 @@ const i18n = {
       });
     }
 
-    // DOM refs
     const elements = document.querySelectorAll('[data-i18n]');
     const langSelect = document.getElementById('langSelect');
     const categoriesContainer = document.getElementById('categories');
@@ -322,7 +343,6 @@ const i18n = {
     const itemsList = document.getElementById('itemsList');
     const backBtn = document.getElementById('backToCats');
 
-    // Apply translations
     function applyI18n(){
       elements.forEach(el=>{
         const key = el.dataset.i18n;
@@ -331,25 +351,34 @@ const i18n = {
       });
     }
 
-    // Language handling
+const setLanguage = (newLang) => {
+    lang = newLang;
+    localStorage.setItem('lang', lang);
     langSelect.value = lang;
-    langSelect.addEventListener('change', (e) => {
-  lang = e.target.value;
-  localStorage.setItem('lang', lang);
-  applyI18n();
-  updatePromoTexts();        // ← новая строка
-  if (!itemsBlock.classList.contains('hidden')) {
-    renderItems();
-  } else {
-    renderCategories();
-  }
+
+    document.querySelectorAll('.lang-btn-m').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.lang === lang);
+    });
+
+    applyI18n();
+    updatePromoTexts();
+    if (!itemsBlock.classList.contains('hidden')) renderItems();
+    else renderCategories();
+};
+
+
+langSelect.value = lang;
+langSelect.addEventListener('change', (e) => setLanguage(e.target.value));
+
+document.querySelectorAll('.lang-btn-m').forEach(btn => {
+    btn.addEventListener('click', () => setLanguage(btn.dataset.lang));
+    if (btn.dataset.lang === lang) btn.classList.add('active');
 });
 
-// Также обновляем при первой загрузке
 updatePromoTexts();
 
     applyI18n();
-    // Обновление текстов в карусели при смене языка
+
 function updatePromoTexts() {
   document.querySelectorAll('[data-i18n-promo]').forEach(el => {
     const key = el.getAttribute('data-i18n-promo');
@@ -358,7 +387,6 @@ function updatePromoTexts() {
   });
 }
 
-    // Section nav (header buttons)
     document.querySelectorAll('button[data-section]').forEach(btn=>{
       btn.addEventListener('click', ()=>{
         const id = btn.dataset.section;
@@ -372,7 +400,7 @@ function updatePromoTexts() {
             el.classList.add('hidden');
           }
         });
-        // if returning to menu ensure categories shown
+
         if(id === 'menu'){
           itemsBlock.classList.add('hidden');
           categoriesContainer.classList.remove('hidden');
@@ -380,7 +408,6 @@ function updatePromoTexts() {
       });
     });
 
-    // Fetch categories from API
     async function fetchCategories(){
       try{
         const res = await fetch(`${API_BASE}/categories`);
@@ -394,7 +421,6 @@ function updatePromoTexts() {
       }
     }
 
-    // Render categories (no search)
     function renderCategories(){
       categoriesContainer.innerHTML = '';
       itemsBlock.classList.add('hidden');
@@ -416,26 +442,20 @@ function updatePromoTexts() {
           <img src="${img}" alt="${escapeHtml(name)}" class="w-full h-40 object-cover rounded-lg mb-3">
           <h3 class="text-lg font-semibold text-center">${escapeHtml(name)}</h3>
         `;
-        // click handler: show items immediately and load
+
         card.addEventListener('click', ()=> onCategoryClick(cat.id, card));
         categoriesContainer.appendChild(card);
       });
     }
 
-    // safe text escape
     function escapeHtml(s){ return String(s||'').replace(/[&<>"']/g, c=>({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c])); }
 
-    // click category
     async function onCategoryClick(categoryId, clickedCard){
-      if(loadingCategory) return; // prevent double
+      if(loadingCategory) return;
       loadingCategory = true;
 
-      // immediately hide categories and show itemsBlock (instant UX)
-      // but animate categories out first for smoothness OR hide instantly to ensure immediate show
-      // We'll hide instantly for reliability:
       categoriesContainer.classList.add('hidden');
       itemsBlock.classList.remove('hidden');
-      // prepare empty itemsList and animate in
       itemsList.innerHTML = `<div class="col-span-full p-6 bg-white rounded-2xl shadow text-gray-500">Loading...</div>`;
       itemsBlock.style.opacity = 0;
       requestAnimationFrame(()=> {
@@ -458,14 +478,13 @@ function updatePromoTexts() {
       }
     }
 
-    // Render items (no search)
     function renderItems(){
       itemsList.innerHTML = '';
       if(!currentItems.length){
         itemsList.innerHTML = `<div class="col-span-full p-6 bg-white rounded-2xl shadow text-gray-600">Блюд нет</div>`;
         return;
       }
-      // create cards
+
       currentItems.forEach(item=>{
         const name = (lang === 'kg' ? (item.name_kg || item.name_en) : (item.name_en || item.name_kg));
         const desc = (lang === 'kg' ? (item.description_kg || item.description_en || '') : (item.description_en || item.description_kg || ''));
@@ -483,11 +502,11 @@ function updatePromoTexts() {
           <p class="text-sm text-gray-600 mb-3">${escapeHtml(desc)}</p>
           <div class="mt-auto font-medium">${priceLabel}: ${escapeHtml(price)} сом</div>
         `;
-        // staggered animation for cards
+
         card.style.opacity = 0;
         card.style.transform = 'translateY(12px)';
         itemsList.appendChild(card);
-        // stagger
+
         const idx = itemsList.children.length;
         setTimeout(()=> {
           card.style.transition = 'opacity .36s ease, transform .36s ease';
@@ -495,11 +514,9 @@ function updatePromoTexts() {
           card.style.transform = 'none';
         }, 40 * idx);
       });
-      // scroll into view
+
       itemsBlock.scrollIntoView({behavior:'smooth', block:'start'});
     }
-
-    // Back button
     backBtn.addEventListener('click', ()=>{
       // animate hide itemsBlock quickly
       itemsBlock.style.transition = 'opacity .28s ease, transform .28s ease';
@@ -513,7 +530,7 @@ function updatePromoTexts() {
         currentItems = [];
       }, 300);
     });
-    // ===== КАРУСЕЛЬ С АКЦИЯМИ =====
+
 const carousel = document.getElementById('promoCarousel');
 const slides = carousel.children;
 const dots = document.querySelectorAll('.dot');
@@ -545,36 +562,38 @@ dots.forEach((dot, i) => {
   });
 });
 
-// Автопрокрутка каждые 6 секунд
 setInterval(() => {
   currentSlide = (currentSlide + 1) % totalSlides;
   updateCarousel();
 }, 6000);
 
-updateCarousel(); // инициализация
+updateCarousel();
 
-    // Initialize
     fetchCategories();
-    // === МОБИЛЬНОЕ БУРГЕР-МЕНЮ ===
-const burger = document.getElementById('burger');
-const nav = document.querySelector('header nav');
+    const burger = document.getElementById('burger');
+    const closeBurger = document.getElementById('closeBurger');
+    const nav = document.querySelector('header nav');
 
-if (burger && nav) {
-    burger.addEventListener('click', () => {
-        burger.classList.toggle('open');
-        nav.classList.toggle('open');
-    });
+    if (burger && closeBurger && nav) {
 
-    // Закрывать меню при клике на пункт
-    document.querySelectorAll('header nav button[data-section]').forEach(btn => {
-        btn.addEventListener('click', () => {
-            if (window.innerWidth <= 768) {
-                burger.classList.remove('open');
-                nav.classList.remove('open');
-            }
+        burger.addEventListener('click', () => {
+            burger.classList.toggle('open');
+            nav.classList.toggle('open');
         });
-    });
-}
+
+        closeBurger.addEventListener('click', () => {
+            burger.classList.remove('open');
+            nav.classList.remove('open');
+        });
+        document.querySelectorAll('header nav button[data-section]').forEach(btn => {
+            btn.addEventListener('click', () => {
+                if (window.innerWidth <= 768) {
+                    burger.classList.remove('open');
+                    nav.classList.remove('open');
+                }
+            });
+        });
+    }
 </script>
 </body>
 </html>
