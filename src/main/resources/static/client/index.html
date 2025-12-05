@@ -17,12 +17,12 @@
         h1,h2,h3{font-family:'Playfair Display',serif}
         .btn-primary{background:var(--accent);color:var(--text);transition:transform .18s ease,box-shadow .18s ease}
         .btn-primary:hover{transform:scale(1.03);box-shadow:0 8px 20px rgba(0,0,0,.12)}
-        /* simple animations (reliable) */
+
         .fade-slide-enter{opacity:0;transform:translateY(18px)}
         .fade-slide-enter.fade-slide-enter-active{opacity:1;transform:none;transition:opacity .36s ease,transform .36s ease}
         .fade-slide-leave{opacity:1;transform:none}
         .fade-slide-leave.fade-slide-leave-active{opacity:0;transform:translateY(-10px);transition:opacity .28s ease,transform .28s ease}
-        /* card hover */
+
         .menu-card{transition:transform .22s ease,box-shadow .22s ease}
         .menu-card:hover{transform:translateY(-6px);box-shadow:0 12px 30px rgba(31,59,47,.08)}
         /* responsive adjustments */
@@ -104,7 +104,7 @@ header nav {
 #closeBurger:active {
     transform: scale(0.92);
 }
-  /* Аккуратное выравнивание блока бонусов на мобильных */
+
 @media (max-width: 768px) {
   #bonus-balance {
     font-size: 1rem;
@@ -121,7 +121,7 @@ header nav {
   }
 }
 
-/* На десктопе — всё в одну строку, кнопка справа */
+
 @media (min-width: 769px) {
   h1 > .ml-auto {
     margin-left: auto;
@@ -141,7 +141,7 @@ header nav {
             <button data-section="menu" class="px-4 py-2 rounded-md hover:bg-green-50 transition whitespace-nowrap" data-i18n="menu">Меню</button>
             <button data-section="contact" class="px-4 py-2 rounded-md hover:bg-green-50 transition whitespace-nowrap" data-i18n="contact">Байланыш</button>
 
-            <!-- Десктоп: в одну строку после "Байланыш" -->
+
             <div class="hidden md:flex items-center gap-5">
         <span id="bonus-balance-desktop"
               class="text-lg font-medium text-gray-700 whitespace-nowrap"
@@ -149,14 +149,15 @@ header nav {
             Бонус балансы: <span id="bonus-amount">0</span>
         </span>
 
+
                 <button id="get-bonuses-btn"
-                        class="px-5 py-2.5 btn-primary rounded-full font-semibold whitespace-nowrap transition-transform hover:scale-105"
-                        data-i18n="get_bonuses">
+                        onclick="window.location.href='/client/bonuses.html'"
+                        class="px-5 py-2.5 btn-primary rounded-full font-semibold whitespace-nowrap transition-transform hover:scale-105">
                     Бонус алуу
                 </button>
             </div>
 
-            <!-- Мобильная версия: отдельные красивые пункты в бургер-меню -->
+
             <div class="flex md:hidden flex-col items-center gap-4 w-full max-w-xs mx-auto">
                 <div class="py-3 text-center">
             <span class="text-lg font-medium text-gray-700"
@@ -165,20 +166,21 @@ header nav {
             </span>
                 </div>
 
+
                 <button id="get-bonuses-btn-mobile"
-                        class="w-full py-3 btn-primary rounded-full font-semibold text-base"
-                        data-i18n="get_bonuses">
+                        onclick="window.location.href='/client/bonuses.html'"
+                        class="w-full py-3 btn-primary rounded-full font-semibold text-base">
                     Бонус алуу
                 </button>
             </div>
 
-            <!-- Переключатель языка (десктоп) -->
+
             <select id="langSelect" class="ml-4 px-3 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-amber-400 max-md:hidden">
                 <option value="kg">KG</option>
                 <option value="en">EN</option>
             </select>
 
-            <!-- Переключатель языка (мобильный) -->
+
             <div class="lang-toggle-mobile hidden max-md:flex items-center gap-3 mt-4">
                 <button type="button" class="lang-btn-m px-5 py-2.5 text-sm font-medium rounded-full transition-all" data-lang="kg">KG</button>
                 <span class="text-gray-400">/</span>
@@ -332,7 +334,7 @@ header nav {
     let lang = localStorage.getItem('lang') || 'kg';
     let categoriesData = [];
     let currentItems = [];
-    let loadingCategory = false; // prevent double clicks while loading
+    let loadingCategory = false;
 
 const i18n = {
   kg: {
@@ -348,7 +350,7 @@ const i18n = {
     promo2_title: "2 десерт = 1 баасы",
     promo2_sub: "1000 сомдон жогору заказга",
     promo3_title: "Кышкы меню келди!",
-    promo3_sub: "Ысык шоколад жана имбир чай ♡",   // ← запятая есть
+    promo3_sub: "Ысык шоколад жана имбир чай ♡",
 
     get_bonuses: "Бонус алуу",
     bonus_balance_label: "Бонус балансы"
@@ -366,7 +368,7 @@ const i18n = {
     promo2_title: "2 desserts = 1 price",
     promo2_sub: "For orders over 1000 som",
     promo3_title: "Winter menu is here!",
-    promo3_sub: "Hot chocolate & ginger tea ♡",   // ← запятая есть
+    promo3_sub: "Hot chocolate & ginger tea ♡",
 
     get_bonuses: "Get Bonuses",
     bonus_balance_label: "Bonus Balance"
@@ -650,12 +652,12 @@ updateCarousel();
                 }
             });
         });
-        // Синхронизация отображаемого баланса на всех устройствах
+
 document.querySelectorAll('#bonus-amount, #bonus-amount-mobile').forEach(el => {
     el.textContent = localStorage.getItem('bonusAmount') || '0';
 });
 
-// Пример обновления баланса (когда бонусы начисляются)
+
 function updateBonusAmount(newAmount) {
     const amount = newAmount.toString();
     localStorage.setItem('bonusAmount', amount);
@@ -663,6 +665,13 @@ function updateBonusAmount(newAmount) {
         el.textContent = amount;
     });
 }
+
+window.addEventListener('bonusUpdated', () => {
+    const amount = localStorage.getItem('bonusAmount') || '0';
+    document.querySelectorAll('#bonus-amount, #bonus-amount-mobile').forEach(el => {
+        el.textContent = amount;
+    });
+});
 }
 
 </script>

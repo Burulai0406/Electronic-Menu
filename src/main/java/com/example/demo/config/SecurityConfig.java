@@ -51,10 +51,10 @@ public class SecurityConfig {
         http.cors(cors -> {});
 
         http.authorizeHttpRequests(auth -> auth
-                // PUBLIC
+
                 .requestMatchers("/", "/index.html", "/css/**", "/js/**", "/images/**", "/static/**", "/menu/**")
                 .permitAll()
-                // ADMIN API
+
                 .requestMatchers("/api/admin/**").authenticated()
                 .anyRequest().permitAll()
         );

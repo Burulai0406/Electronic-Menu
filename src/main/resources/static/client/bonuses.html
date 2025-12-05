@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="kg" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chai Caffe - Бонусы</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        :root{--bg:#FEFFE7;--text:#1F3B2F;--accent:#FED2A0}
+        body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text)}
+        h1,h2{font-family:'Playfair Display',serif}
+        .btn-primary{background:var(--accent);color:var(--text);padding:0.75rem 2rem;border-radius:9999px;font-weight:600;transition:all .2s}
+        .btn-primary:hover{transform:scale(1.05);box-shadow:0 8px 25px rgba(0,0,0,.15)}
+    </style>
+</head>
+<body class="min-h-screen flex flex-col">
+<header class="bg-white/70 backdrop-blur-md shadow-sm sticky top-0 z-50">
+    <div class="max-w-6xl mx-auto p-4 flex justify-between items-center">
+        <a href="/" class="text-2xl font-bold">Chai Caffe</a>
+        <button onclick="history.back()" class="btn-primary">← Назад</button>
+    </div>
+</header>
+
+<main class="flex-1 flex items-center justify-center px-4 py-12">
+    <div class="bg-white rounded-3xl shadow-2xl p-8 max-w-md w-full text-center">
+        <h1 class="text-4xl md:text-5xl font-bold mb-8" id="welcome-title">
+            Welcome to game
+        </h1>
+
+        <div id="login-form">
+            <p class="text-lg mb-6" id="enter-phone-text">Enter your phone number to start game</p>
+            <input type="tel" id="phone-input" placeholder="0XX XXX XX XX" class="w-full p-4 text-lg border-2 border-amber-200 rounded-xl focus:border-amber-400 outline-none mb-4">
+            <button id="submit-phone" class="btn-primary w-full text-xl py-4">Продолжить</button>
+        </div>
+
+        <div id="game-section" class="hidden">
+            <div class="mb-6">
+                <p class="text-xl">Ваш баланс: <span id="current-bonus" class="font-bold text-2xl text-amber-600">0</span> бонусов</p>
+            </div>
+            <button id="start-game-btn" class="btn-primary text-xl py-4 w-full mb-6">
+                Оюнду баштоо
+            </button>
+            <div id="game-container"></div>
+        </div>
+    </div>
+</main>
+
+<script>
+    const lang = localStorage.getItem('lang') || 'kg';
+    const texts = {
+        kg: {
+            welcome: "Кош келдиң оюнга",
+            enter: "Оюнду баштоо үчүн номериңизди киргизиңиз",
+            start: "Оюнду баштоо"
+        },
+        en: {
+            welcome: "Welcome to game",
+            enter: "Enter your phone number to start game",
+            start: "Start game"
+        }
+    };
+
+    document.getElementById('welcome-title').textContent = texts[lang].welcome;
+    document.getElementById('enter-phone-text').textContent = texts[lang].enter;
+    document.getElementById('start-game-btn').textContent = texts[lang].start;
+
+    let currentUserPhone = null;
+
+    document.getElementById('submit-phone').addEventListener('click', async () => {
+        let phone = document.getElementById('phone-input').value.replace(/\D/g, '');
+        if (phone.length !== 10) {
+            alert(lang === 'kg' ? 'Номер туура эмес (10 сан)' : 'Invalid number (10 digits)');
+            return;
+        }
+
+        const res = await fetch('/api/bonus/login', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({phone})
+        });
+
+        const data = await res.json();
+        if (data.error) {
+            alert(data.error);
+            return;
+        }
+
+        currentUserPhone = phone;
+        document.getElementById('current-bonus').textContent = data.bonus;
+        document.getElementById('login-form').classList.add('hidden');
+        document.getElementById('game-section').classList.remove('hidden');
+
+
+        localStorage.setItem('bonusAmount', data.bonus);
+        window.dispatchEvent(new Event('bonusUpdated'));
+    });
+
+    document.getElementById('start-game-btn').addEventListener('click', () => {
+        document.getElementById('game-container').innerHTML = `
+           <iframe src="/game/game.html"
+        class="w-full h-96 md:h-[600px] border-4 border-amber-300 rounded-2xl"
+        frameborder="0"
+        allowfullscreen>
+       </iframe>
+        `;
+        document.getElementById('start-game-btn').classList.add('hidden');
+    });
+
+    window.addEventListener('message', (e) => {
+        if (e.data && e.data.type === 'gameFinished' && currentUserPhone) {
+            const points = e.data.points || 0;
+            fetch('/api/bonus/add', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({phone: currentUserPhone, points})
+            }).then(r => r.json()).then(d => {
+                document.getElementById('current-bonus').textContent = d.newBonus;
+                localStorage.setItem('bonusAmount', d.newBonus);
+                window.dispatchEvent(new Event('bonusUpdated'));
+                alert(lang === 'kg' ? `Сиз ${points} бонус алдыңыз!` : `You earned ${points} bonuses!`);
+            });
+        }
+    });
+</script>
+</body>
+</html>
