@@ -60,7 +60,7 @@ public class SecurityConfig {
         );
 
         http.httpBasic(Customizer.withDefaults());
-
+        http.headers(headers -> headers.frameOptions(frame -> frame.disable()));
         return http.build();
     }
 }

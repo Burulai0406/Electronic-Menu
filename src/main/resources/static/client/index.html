@@ -25,7 +25,6 @@
 
         .menu-card{transition:transform .22s ease,box-shadow .22s ease}
         .menu-card:hover{transform:translateY(-6px);box-shadow:0 12px 30px rgba(31,59,47,.08)}
-        /* responsive adjustments */
         @media (max-width:640px){
           .h-96{height:360px}
         }
@@ -106,9 +105,6 @@ header nav {
 }
 
 @media (max-width: 768px) {
-  #bonus-balance {
-    font-size: 1rem;
-  }
   #get-bonuses-btn {
     padding: 0.5rem 1rem;
     font-size: 0.95rem;
@@ -120,8 +116,6 @@ header nav {
     margin-top: 0.5rem;
   }
 }
-
-
 @media (min-width: 769px) {
   h1 > .ml-auto {
     margin-left: auto;
@@ -141,39 +135,23 @@ header nav {
             <button data-section="menu" class="px-4 py-2 rounded-md hover:bg-green-50 transition whitespace-nowrap" data-i18n="menu">Меню</button>
             <button data-section="contact" class="px-4 py-2 rounded-md hover:bg-green-50 transition whitespace-nowrap" data-i18n="contact">Байланыш</button>
 
-
             <div class="hidden md:flex items-center gap-5">
-        <span id="bonus-balance-desktop"
-              class="text-lg font-medium text-gray-700 whitespace-nowrap"
-              data-i18n="bonus_balance_label">
-            Бонус балансы: <span id="bonus-amount">0</span>
-        </span>
-
-
                 <button id="get-bonuses-btn"
                         onclick="window.location.href='/client/bonuses.html'"
-                        class="px-5 py-2.5 btn-primary rounded-full font-semibold whitespace-nowrap transition-transform hover:scale-105">
+                        class="px-5 py-2.5 btn-primary rounded-full font-semibold whitespace-nowrap transition-transform hover:scale-105"
+                        data-i18n="get_bonuses">
                     Бонус алуу
                 </button>
             </div>
-
 
             <div class="flex md:hidden flex-col items-center gap-4 w-full max-w-xs mx-auto">
-                <div class="py-3 text-center">
-            <span class="text-lg font-medium text-gray-700"
-                  data-i18n="bonus_balance_label">
-                Бонус балансы: <span id="bonus-amount-mobile">0</span>
-            </span>
-                </div>
-
-
                 <button id="get-bonuses-btn-mobile"
                         onclick="window.location.href='/client/bonuses.html'"
-                        class="w-full py-3 btn-primary rounded-full font-semibold text-base">
+                        class="w-full py-3 btn-primary rounded-full font-semibold text-base"
+                        data-i18n="get_bonuses">
                     Бонус алуу
                 </button>
             </div>
-
 
             <select id="langSelect" class="ml-4 px-3 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-amber-400 max-md:hidden">
                 <option value="kg">KG</option>
@@ -203,8 +181,7 @@ header nav {
         </div>
     </div>
 </header>
-
-<div class="relative overflow-hidden bg-gradient-to-r from-amber-50 to-orange-50">
+<div class="relative overflow-hidden bg-gradient-to-r from-amber-50 to-orange-50 mb-8 md:mb-12">
     <div id="promoCarousel" class="flex transition-transform duration-700 ease-in-out" style="transform: translateX(0)">
 
         <div class="min-w-full relative">
@@ -353,7 +330,6 @@ const i18n = {
     promo3_sub: "Ысык шоколад жана имбир чай ♡",
 
     get_bonuses: "Бонус алуу",
-    bonus_balance_label: "Бонус балансы"
   },
   en: {
     about: 'About us',
@@ -370,8 +346,8 @@ const i18n = {
     promo3_title: "Winter menu is here!",
     promo3_sub: "Hot chocolate & ginger tea ♡",
 
-    get_bonuses: "Get Bonuses",
-    bonus_balance_label: "Bonus Balance"
+    get_bonuses: "Get Bonuses"
+
   }
 };
 
@@ -484,7 +460,6 @@ function updatePromoTexts() {
       categoriesContainer.innerHTML = '';
       itemsBlock.classList.add('hidden');
       categoriesContainer.classList.remove('hidden');
-      // animate container
       animateIn(categoriesContainer);
 
       if(!categoriesData.length){
@@ -577,15 +552,12 @@ function updatePromoTexts() {
       itemsBlock.scrollIntoView({behavior:'smooth', block:'start'});
     }
     backBtn.addEventListener('click', ()=>{
-      // animate hide itemsBlock quickly
       itemsBlock.style.transition = 'opacity .28s ease, transform .28s ease';
       itemsBlock.style.opacity = 0;
       itemsBlock.style.transform = 'translateY(10px)';
       setTimeout(()=>{
         itemsBlock.classList.add('hidden');
-        // show categories again
         renderCategories();
-        // reset current items
         currentItems = [];
       }, 300);
     });

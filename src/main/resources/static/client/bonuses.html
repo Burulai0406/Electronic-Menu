@@ -18,7 +18,7 @@
 <header class="bg-white/70 backdrop-blur-md shadow-sm sticky top-0 z-50">
     <div class="max-w-6xl mx-auto p-4 flex justify-between items-center">
         <a href="/" class="text-2xl font-bold">Chai Caffe</a>
-        <button onclick="history.back()" class="btn-primary">← Назад</button>
+        <button onclick="history.back()" class="btn-primary" id="back-button">← Назад</button>
     </div>
 </header>
 
@@ -36,7 +36,7 @@
 
         <div id="game-section" class="hidden">
             <div class="mb-6">
-                <p class="text-xl">Ваш баланс: <span id="current-bonus" class="font-bold text-2xl text-amber-600">0</span> бонусов</p>
+                <p class="text-xl" id="balance-text">Ваш баланс: <span id="current-bonus" class="font-bold text-2xl text-amber-600">0</span> <span id="bonus-text">бонусов</span></p>
             </div>
             <button id="start-game-btn" class="btn-primary text-xl py-4 w-full mb-6">
                 Оюнду баштоо
@@ -50,27 +50,57 @@
     const lang = localStorage.getItem('lang') || 'kg';
     const texts = {
         kg: {
-            welcome: "Кош келдиң оюнга",
+            back: "← Артка",
+            welcome: "Оюнга кош келдиңиз",
             enter: "Оюнду баштоо үчүн номериңизди киргизиңиз",
-            start: "Оюнду баштоо"
+            phonePlaceholder: "0XX XXX XX XX",
+            continue: "Улантуу",
+            balance: "Сиздин баланс:",
+            bonuses: "бонус",
+            startGame: "Оюнду баштоо",
+            invalidPhone: "Номер туура эмес (10 сан)",
+            earnedBonus: (points) => `Сиз ${points} бонус алдыңыз!`
         },
         en: {
-            welcome: "Welcome to game",
-            enter: "Enter your phone number to start game",
-            start: "Start game"
+            back: "← Back",
+            welcome: "Welcome to the game",
+            enter: "Enter your phone number to start the game",
+            phonePlaceholder: "0XX XXX XX XX",
+            continue: "Continue",
+            balance: "Your balance:",
+            bonuses: "bonuses",
+            startGame: "Start game",
+            invalidPhone: "Invalid number (10 digits)",
+            earnedBonus: (points) => `You earned ${points} bonuses!`
         }
     };
 
-    document.getElementById('welcome-title').textContent = texts[lang].welcome;
-    document.getElementById('enter-phone-text').textContent = texts[lang].enter;
-    document.getElementById('start-game-btn').textContent = texts[lang].start;
+    function applyLanguage(langCode) {
+        const t = texts[langCode];
+
+        document.getElementById('welcome-title').textContent = t.welcome;
+        document.getElementById('enter-phone-text').textContent = t.enter;
+        document.getElementById('phone-input').placeholder = t.phonePlaceholder;
+        document.getElementById('submit-phone').textContent = t.continue;
+
+        document.getElementById('back-button').textContent = t.back;
+
+        document.getElementById('balance-text').innerHTML = `${t.balance} <span id="current-bonus" class="font-bold text-2xl text-amber-600">0</span> <span id="bonus-text">${t.bonuses}</span>`;
+        document.getElementById('start-game-btn').textContent = t.startGame;
+
+
+        localStorage.setItem('lang', langCode);
+    }
+
+
+    applyLanguage(lang);
 
     let currentUserPhone = null;
 
     document.getElementById('submit-phone').addEventListener('click', async () => {
         let phone = document.getElementById('phone-input').value.replace(/\D/g, '');
         if (phone.length !== 10) {
-            alert(lang === 'kg' ? 'Номер туура эмес (10 сан)' : 'Invalid number (10 digits)');
+            alert(texts[lang].invalidPhone);
             return;
         }
 
@@ -87,23 +117,30 @@
         }
 
         currentUserPhone = phone;
-        document.getElementById('current-bonus').textContent = data.bonus;
+
+        const bonusElement = document.getElementById('current-bonus');
+        if (bonusElement) {
+            bonusElement.textContent = data.bonus;
+        }
+
         document.getElementById('login-form').classList.add('hidden');
         document.getElementById('game-section').classList.remove('hidden');
-
 
         localStorage.setItem('bonusAmount', data.bonus);
         window.dispatchEvent(new Event('bonusUpdated'));
     });
 
     document.getElementById('start-game-btn').addEventListener('click', () => {
-        document.getElementById('game-container').innerHTML = `
-           <iframe src="/game/game.html"
-        class="w-full h-96 md:h-[600px] border-4 border-amber-300 rounded-2xl"
-        frameborder="0"
-        allowfullscreen>
-       </iframe>
-        `;
+        const iframe = document.createElement('iframe');
+        iframe.src = '/game/game.html';
+        iframe.className = 'w-full h-screen md:h-[600px] border-4 border-amber-300 rounded-2xl mt-4';
+        iframe.frameBorder = '0';
+        iframe.allowFullscreen = true;
+        iframe.sandbox = 'allow-scripts allow-same-origin allow-modals';
+
+        document.getElementById('game-container').innerHTML = '';
+        document.getElementById('game-container').appendChild(iframe);
+
         document.getElementById('start-game-btn').classList.add('hidden');
     });
 
@@ -115,13 +152,24 @@
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({phone: currentUserPhone, points})
             }).then(r => r.json()).then(d => {
-                document.getElementById('current-bonus').textContent = d.newBonus;
+                const bonusElement = document.getElementById('current-bonus');
+                if (bonusElement) {
+                    bonusElement.textContent = d.newBonus;
+                }
                 localStorage.setItem('bonusAmount', d.newBonus);
                 window.dispatchEvent(new Event('bonusUpdated'));
-                alert(lang === 'kg' ? `Сиз ${points} бонус алдыңыз!` : `You earned ${points} bonuses!`);
+                alert(texts[lang].earnedBonus(points));
             });
         }
     });
+
+
+    function updateLanguage(newLang) {
+        lang = newLang;
+        applyLanguage(lang);
+    }
+
+
 </script>
 </body>
 </html>
